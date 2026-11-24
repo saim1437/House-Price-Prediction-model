@@ -3,7 +3,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib
-matplotlib.use("Agg")  # save plots to files, no window needed
+matplotlib.use("Agg")  
 import matplotlib.pyplot as plt
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
@@ -26,14 +26,12 @@ print(data.describe())
 # data cleaning
 print("Missing values:\n", data.isnull().sum())
 data = data.drop_duplicates()
-# missing values are filled with the median later (inside the pipeline),
-# so we do not lose any rows
 
 # MEDV = median house price in $1000s
 X = data.drop('MEDV', axis=1)
 y = data['MEDV']
 
-# quick look: how each feature is related to price
+# how each feature is related to price
 print("\nCorrelation with MEDV:")
 print(data.corr()['MEDV'].sort_values(ascending=False))
 
@@ -49,7 +47,7 @@ def evaluate(name, model):
     print("R2:  ", round(r2_score(y_test, pred), 4))
     return r2_score(y_test, pred)
 
-# each pipeline = fill missing values -> normalize -> model
+# each pipeline = fill missing values then normalize then model
 def make_pipeline(model):
     return Pipeline([
         ('imputer', SimpleImputer(strategy='median')),
